@@ -5,4 +5,5 @@ LinkedIn: https://www.linkedin.com/in/frans-coomans/
 
 ## Write-ups
 
+- [Cat](Cat/README.md)
 - [Haze](Haze/README.md)
