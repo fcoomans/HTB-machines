@@ -375,6 +375,7 @@ cat /root/root.txt
 ```
 
 Tiffany let the dogs out, and `bee`-fore John knew it, I was digging up root. 🐕💻
+
 And `Dog has been Pwned!` 🎉
 
 ![](images/Pasted%20image%2020250704102809.png)
