@@ -6,6 +6,7 @@ Penetration testing write-ups by Frans Coomans, OSCP, for retired Hack The Box (
 
 | Machine Write-Up           | Difficulty | Notes                                                                                                                                                                                     |
 | -------------------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Code](Code/README.md)     | Easy       | Code Injection via Python sandbox bypass (`sys.modules`), Reverse Shell, <br>DB Looting, Password Cracking (MD5), SSH Lateral Move, <br>PrivEsc via backup script path traversal          |
 | [Cypher](Cypher/README.md) | Medium     | Cypher Injection, Java JAR Analysis, Command Injection, Reverse Shell, <br>PrivEsc (BBOT)                                                                                                 |
 | [Dog](Dog/README.md)       | Easy       | .git Enumeration, Backdrop RCE, PrivEsc (bee)                                                                                                                                             |
 | [Cat](Cat/README.md)       | Medium     | Fuzzing, XSS, Session Hijacking, SQLi, Credential Hunting, CVE-2024-6886, <br>Gitea Enumeration                                                                                           |
