@@ -6,6 +6,7 @@ Penetration testing write-ups by Frans Coomans, OSCP, for retired Hack The Box (
 
 | Machine Write-Up                     | Difficulty | Notes                                                                                                                                                                                     |
 | ------------------------------------ | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Fluffy](Fluffy/README.md)           | Easy       | CVE-2025-24071, BloodHound, ADCS Shadow Credentials, ACE Abuse, ESC16,<br>PrivEsc, Password Cracking (NetNTLMv2), certipy-ad                                                              |
 | [Planning](Planning/README.md)       | Easy       | Grafana, CVE-2024-9264, Reverse Shell, SSH port forwarding, Password reuse, <br>PrivEsc through Crontab UI                                                                                |
 | [Environment](Environment/README.md) | Medium     | CVE-2024-52301, Reverse Shell, Authentication Bypass, Arbitrary File upload,<br>Web shell, Weak permissions, PrivEsc through environment variable, SSH                                    |
 | [TheFrizz](TheFrizz/README.md)       | Medium     | CVE-2023-45878, Reverse Shell, Password Cracking (SHA256), Chisel, <br>Password reuse, Active Directory, Kerberos auth, SSH, Recycle Bin artifact recovery,<br>GPO Abuse to PrivEsc       |
