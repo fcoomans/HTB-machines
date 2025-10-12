@@ -1,4 +1,4 @@
-# HTB TombWatcher Write-up
+# 🪦 HTB TombWatcher Write-up
 
 ![](images/Pasted%20image%2020250718182826.png)
 
