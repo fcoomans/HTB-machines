@@ -1,8 +1,19 @@
 # HTB-machines
 
-Penetration testing write-ups by Frans Coomans, OSCP, for retired Hack The Box (HTB) machines. 
+## Status: Archived for New Write-ups
+
+This repository contains older cybersecurity write-ups that were originally published here.
+I have since migrated to publishing new content on my personal website.
+
+➡️ All future write-ups will be published on my website: https://fcoomans.com
+
+This repo will remain available to prevent link rot and maintain access to historical content — but it will not receive new write-ups.
+
+If you are looking for the newest CTF reports, research reports, methodology updates or walkthroughs — always check the website first.
 
 ## Write-Ups
+
+Penetration testing write-ups by Frans Coomans, OSCP, for retired Hack The Box (HTB) machines. 
 
 | Machine Write-Up                     | Difficulty | Notes                                                                                                                                                                                                |
 | ------------------------------------ | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
